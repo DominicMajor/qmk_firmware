@@ -31,7 +31,8 @@
 #define CSE LCTL(LSFT(KC_ESC))
 
 enum custom_keycodes {
-    DOUBLE_ZERO = SAFE_RANGE
+    DOUBLE_ZERO = SAFE_RANGE,
+	UK_POUND
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -39,6 +40,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         switch(keycode) {
             case DOUBLE_ZERO:
                 SEND_STRING("00");
+                return false;
+			case UK_POUND:
+				// This seems too complicated
+                SEND_STRING(SS_DOWN(X_RALT));
+				SEND_STRING(SS_TAP(X_KP_0));
+				SEND_STRING(SS_TAP(X_KP_1));
+				SEND_STRING(SS_TAP(X_KP_6));
+				SEND_STRING(SS_TAP(X_KP_3));
+				SEND_STRING(SS_UP(X_RALT));
                 return false;
         }
     }
@@ -73,13 +83,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * .--------------------------------------------------------------------------------------------------------------------------------------.
  * | CAD    | F1     | F2     | F3     | F4     | F5     | F6     |F7      | F8     | F9     | F10    | F11    | F12    |        | DELETE |
  * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------|
- * | CSE    | PREV   | NEXT   |        |        |        | RGBTOG | HUE+   | SAT+   | VAL+   |        |        |        |        |        |
+ * | CSE    | PREV   | NEXT   |        |        |        | RGBTOG | HUE+   | SAT+   | VAL+   |        |        |        | £      |        |
  * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------+--------|
  * |        | PLAY   | STOP   |        |        |        | RGBMOD | HUE-   | SAT-   | VAL-   |        |        |        |        |        |
  * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------------------------+--------|
  * |        |        |        |        |        |        | RGBSTAT|        |        |        |        |        |        | VOLUP  | MUTE   |
  * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+-----------------+--------+--------|
- * |        |        |        |        | RESET  |        |        |        |        |        |        | RESET  |        | VOLDWN |        |
+ * |        |        |        |        | RESET  |        |        |NUM LOCK|        |        |        | RESET  |        | VOLDWN |        |
  * '--------------------------------------------------------------------------------------------------------------------------------------'
  */
  
@@ -88,7 +98,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   { CSE, KC_MPRV, KC_MNXT, _______, _______, _______, RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, _______, _______, _______, _______, _______  },
   { _______, KC_MPLY, KC_MSTP, _______, _______, _______, RGB_SMOD, RGB_HUD, RGB_SAD, RGB_VAD, _______, _______, _______, _______, _______  },
   { _______, _______, _______, _______, _______, _______, RGB_M_P, _______, _______, _______, _______, _______, _______, KC_VOLU, KC_MUTE  },
-  { _______, _______, _______,_______ , MO(_RT), _______, _______, _______, _______, _______, _______, MO(_RT), _______, KC_VOLD, _______  },
+  { _______, _______, _______,_______ , MO(_RT), _______, _______, KC_NLCK, _______, _______, _______, MO(_RT), _______, KC_VOLD, _______  },
  },
 
 /* RAISED
@@ -107,7 +117,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  
  [_RS] = { /* RAISED */
   { _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,  KC_F6, KC_F6, KC_F6, KC_F6, KC_F6, KC_F6, KC_F6, KC_DEL  },
-  { _______, _______, _______, _______, _______, _______, _______, _______, KC_PSCR, _______, KC_LBRC, KC_RBRC, KC_MINS, KC_EQL,  KC_BSLS },
+  { _______, _______, _______, _______, _______, _______, _______, _______, KC_PSCR, _______, KC_LBRC, KC_RBRC, KC_MINS, UK_POUND,  KC_BSLS },
   { _______, _______, _______, _______, _______, _______, _______, _______, BL_INC, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______  },
   { _______, _______, _______, _______, _______, _______, _______, _______, BL_DEC, _______, KC_HOME, KC_LBRACKET, KC_RBRACKET, KC_END,  _______ },
   { _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, MO(_RT), MO(_RT), _______ },
